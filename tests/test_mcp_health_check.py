@@ -111,6 +111,57 @@ def fixture(mode='json'):
 
 
 class ProbeTests(unittest.TestCase):
+    def test_json_report_success_and_no_tools(self):
+        for mode, count, advertised in [('json', 1, True), ('sse', 1, True),
+                                         ('pagination', 2, True), ('no-tools', None, False)]:
+            with self.subTest(mode=mode):
+                status, output, requests = self.run_fixture(mode, ['--json'])
+                report = json.loads(output)
+                self.assertEqual(status, 0)
+                self.assertEqual(report['status'], 'pass')
+                self.assertEqual(report['exit_code'], status)
+                self.assertEqual(report['schema_version'], '1.0')
+                self.assertEqual(report['tool_count'], count)
+                self.assertEqual(report['tools_advertised'], advertised)
+                self.assertEqual(report['negotiated_protocol_version'], '2025-11-25')
+                self.assertEqual(len(report['requests']), len(requests))
+                self.assertFalse(report['tools_executed'])
+                self.assertIsNone(report['error'])
+                self.assertNotIn('fixture-session', output)
+                self.assertNotIn('fixture_tool', output)
+                self.assertNotIn('127.0.0.1', output)
+
+    def test_json_report_failure_and_redaction(self):
+        for mode in ('auth', 'wrong-id', 'malformed-json', 'rpc-error', 'bad-notification'):
+            with self.subTest(mode=mode):
+                status, output, _ = self.run_fixture(mode, ['--json'])
+                report = json.loads(output)
+                self.assertEqual(status, 1)
+                self.assertEqual(report['status'], 'fail')
+                self.assertEqual(report['exit_code'], 1)
+                self.assertEqual(report['error']['code'], 'discovery_failed')
+                self.assertIsNotNone(report['error']['method'])
+                self.assertIsNone(report['tool_count'])
+                self.assertNotIn('fixture-session', output)
+                self.assertNotIn('fixture_tool', output)
+                if mode == 'auth':
+                    self.assertEqual(report['requests'][0]['http_status'], 401)
+
+    def test_json_configuration_failure_is_one_document_without_network(self):
+        with patch.object(health.Probe, 'run') as run, contextlib.redirect_stdout(io.StringIO()) as out:
+            status = health.main(['https://user:private@example.com/mcp', '--json'])
+        report = json.loads(out.getvalue())
+        self.assertEqual(status, 1)
+        self.assertEqual(report['error']['code'], 'configuration_error')
+        self.assertEqual(report['requests'], [])
+        self.assertNotIn('private', out.getvalue())
+        run.assert_not_called()
+
+    def test_json_interrupt_is_reported(self):
+        with patch.object(health.Probe, 'run', side_effect=KeyboardInterrupt), contextlib.redirect_stdout(io.StringIO()) as out:
+            self.assertEqual(health.main(['https://example.com/mcp', '--json']), 1)
+        self.assertEqual(json.loads(out.getvalue())['error']['code'], 'interrupted')
+
     def run_fixture(self, mode, extra=None):
         with fixture(mode) as (url, requests), contextlib.redirect_stdout(io.StringIO()) as out:
             status = health.main([url] + (extra or []))
