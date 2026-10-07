@@ -93,6 +93,15 @@ python3 tools/issue_report.py probe-report.json > issue-draft.md
 
 The lab uses temporary loopback fixtures only. The draft generator selects bounded diagnostic fields, ignores server messages and arbitrary metadata, and never submits an issue. Add your synthetic reproduction and environment details, then review before sharing. See the [fault lab and issue guide](docs/FAULT-LAB-AND-ISSUES.md) for cases, exit semantics and stdin usage.
 
+## Compare discovery before and after an update
+
+```bash
+python3 tools/integration_guard.py before.json after.json --json
+python3 examples/integration_guard_demo.py
+```
+
+The offline guard compares a healthy baseline with a current probe report. Failed discovery, lost tool capability or decreased tool count exits 1. Other healthy changes are reported for review; `--strict-changes` also blocks them. Invalid or incomparable input exits 2. Keep the same endpoint, auth scope and requested revision. Tool names/schemas are omitted from reports, so equal-count tool substitutions are not detectable. See the [integration guard guide](docs/INTEGRATION-GUARD.md) for policy and CI usage.
+
 ## Contribute
 
 See [CONTRIBUTING.md](CONTRIBUTING.md). Report a minimal synthetic reproduction, expected behavior, Python version and negotiated MCP revision. **Issues are public: never attach credentials or production/customer data.**
