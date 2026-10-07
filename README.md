@@ -80,6 +80,19 @@ python3 examples/json_report_demo.py
 
 The included GitHub Actions workflow runs manually with local fixtures by default. Remote probing requires an explicit manual choice and a configured authorized endpoint. See the [agent and CI guide](docs/AGENT-AND-CI.md) for the JSON contract, examples and setup.
 
+## Fault lab and issue drafts
+
+Reproduce seven healthy and intentionally broken discovery cases locally, then turn a probe JSON report into a Markdown issue draft:
+
+```bash
+python3 examples/fault_lab.py
+python3 examples/fault_lab.py --case wrong-id --report > probe-report.json
+# Expected exit 1 for this intentional fault; continue with:
+python3 tools/issue_report.py probe-report.json > issue-draft.md
+```
+
+The lab uses temporary loopback fixtures only. The draft generator selects bounded diagnostic fields, ignores server messages and arbitrary metadata, and never submits an issue. Add your synthetic reproduction and environment details, then review before sharing. See the [fault lab and issue guide](docs/FAULT-LAB-AND-ISSUES.md) for cases, exit semantics and stdin usage.
+
 ## Contribute
 
 See [CONTRIBUTING.md](CONTRIBUTING.md). Report a minimal synthetic reproduction, expected behavior, Python version and negotiated MCP revision. **Issues are public: never attach credentials or production/customer data.**
