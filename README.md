@@ -69,6 +69,17 @@ python3 -m unittest discover -s tests -p test_mcp_health_check.py -v
 
 The synthetic webhook example demonstrates why parsing and reserializing JSON can break raw-body HMAC verification. It is not a provider-specific verifier. Tests run against loopback fixtures and cover sessions, JSON/SSE, auth, pagination, redirects and failures.
 
+## JSON for agents and GitHub Actions
+
+```bash
+python3 tools/mcp_health_check.py https://your-authorized-mcp.example/mcp --json
+python3 examples/json_report_demo.py
+```
+
+`--json` emits one sanitized report with pass/fail status, protocol revision, HTTP observations, complete tool count and structured failure details. Exit `0` indicates completed bounded discovery; exit `1` indicates failure. CLI syntax errors retain argparse exit `2` behavior. It omits URLs, credentials, session values, server bodies and tool names.
+
+The included GitHub Actions workflow runs manually with local fixtures by default. Remote probing requires an explicit manual choice and a configured authorized endpoint. See the [agent and CI guide](docs/AGENT-AND-CI.md) for the JSON contract, examples and setup.
+
 ## Contribute
 
 See [CONTRIBUTING.md](CONTRIBUTING.md). Report a minimal synthetic reproduction, expected behavior, Python version and negotiated MCP revision. **Issues are public: never attach credentials or production/customer data.**
