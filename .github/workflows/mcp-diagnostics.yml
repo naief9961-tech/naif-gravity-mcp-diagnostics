@@ -28,6 +28,7 @@ jobs:
           python3 examples/json_report_demo.py > local-report.json
           python3 -m json.tool local-report.json
           python3 examples/fault_lab.py
+          python3 examples/integration_guard_demo.py
           python3 tools/issue_report.py local-report.json > local-issue-draft.md
       - name: Probe explicitly authorized remote MCP endpoint
         if: ${{ inputs.run_remote }}
