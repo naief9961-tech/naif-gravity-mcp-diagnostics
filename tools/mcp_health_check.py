@@ -92,12 +92,21 @@ def read_response(res, request_id, deadline):
 
 
 class Probe:
-    def __init__(self, url, timeout=10, token=None):
+    def __init__(self, url, timeout=10, token=None, json_output=False):
         self.url, self.timeout, self.token = url, timeout, token
         self.version = self.session = None
         self.opener = urllib.request.build_opener(NoRedirect())
+        self.json_output = json_output
+        self.events = []
+        self.active_method = None
+        self.tools_advertised = self.tool_count = None
+
+    def log(self, text):
+        if not self.json_output:
+            print(text)
 
     def post(self, method, params=None, notification=False):
+        self.active_method = method
         request_id = str(uuid.uuid4())
         message = {'jsonrpc': '2.0', 'method': method}
         if not notification:
@@ -117,7 +126,8 @@ class Probe:
         deadline = time.monotonic() + self.timeout
         try:
             with self.opener.open(req, timeout=self.timeout) as res:
-                print('[' + method + '] HTTP ' + str(res.status))
+                self.events.append({'method': method, 'http_status': res.status})
+                self.log('[' + method + '] HTTP ' + str(res.status))
                 if notification:
                     if res.status != 202 or res.read(1):
                         raise ProbeError('notification must return empty HTTP 202')
@@ -133,6 +143,7 @@ class Probe:
                 return result
         except urllib.error.HTTPError as e:
             code = e.code
+            self.events.append({'method': method, 'http_status': code})
             e.close()
             raise ProbeError('HTTP ' + str(code) + ' (response body omitted)') from None
         except (socket.timeout, TimeoutError):
@@ -153,11 +164,12 @@ class Probe:
         if not all(isinstance(info.get(k), str) and info[k] for k in ('name', 'version')):
             raise ProbeError('invalid serverInfo')
         self.version = version
-        print('protocol: ' + version)
-        print('session: ' + ('present' if self.session else 'not assigned'))
+        self.log('protocol: ' + version)
+        self.log('session: ' + ('present' if self.session else 'not assigned'))
+        self.tools_advertised = 'tools' in capabilities
         self.post('notifications/initialized', notification=True)
         if 'tools' not in capabilities:
-            print('tools: not advertised; discovery complete')
+            self.log('tools: not advertised; discovery complete')
             return
         if not isinstance(capabilities['tools'], dict):
             raise ProbeError('invalid tools capability')
@@ -179,7 +191,8 @@ class Probe:
             count += len(tools)
             cursor = result.get('nextCursor')
             if cursor is None:
-                print('tools: ' + str(count))
+                self.tool_count = count
+                self.log('tools: ' + str(count))
                 return
             if not isinstance(cursor, str) or not cursor or cursor in seen:
                 raise ProbeError('invalid or repeated pagination cursor')
@@ -203,7 +216,12 @@ def main(argv=None):
     parser.add_argument('--timeout', type=positive_timeout, default=10)
     parser.add_argument('--protocol-version', choices=VERSIONS, default='2025-06-18')
     parser.add_argument('--token-env', metavar='ENV_NAME', help='read a bearer token from this environment variable')
+    parser.add_argument('--json', action='store_true', help='emit one sanitized JSON report on stdout')
     args = parser.parse_args(argv)
+    probe = None
+    error = None
+    code = None
+    status = 1
     try:
         url = urllib.parse.urlsplit(args.url)
         if url.scheme not in ('http', 'https') or not url.hostname or url.username or url.password or url.fragment:
@@ -215,15 +233,29 @@ def main(argv=None):
                 raise ProbeError('token environment variable is missing, empty, or invalid')
             if url.scheme != 'https' and url.hostname not in ('localhost', '127.0.0.1', '::1'):
                 raise ProbeError('bearer authentication requires HTTPS except on loopback')
-        Probe(args.url, args.timeout, token).run(args.protocol_version)
-        print('PASS: bounded discovery completed. No tools were executed.')
-        return 0
+        probe = Probe(args.url, args.timeout, token, json_output=args.json)
+        probe.run(args.protocol_version)
+        status = 0
     except (ProbeError, ValueError) as e:
-        print('FAIL: ' + (str(e) if isinstance(e, ProbeError) else 'invalid endpoint URL'))
-        return 1
+        error = str(e) if isinstance(e, ProbeError) else 'invalid endpoint URL'
+        code = 'discovery_failed' if probe else 'configuration_error'
     except KeyboardInterrupt:
-        print('FAIL: interrupted')
-        return 1
+        error, code = 'interrupted', 'interrupted'
+    if args.json:
+        print(json.dumps({
+            'schema_version': '1.0', 'status': 'pass' if status == 0 else 'fail',
+            'exit_code': status, 'requested_protocol_version': args.protocol_version,
+            'negotiated_protocol_version': probe.version if probe else None,
+            'session_present': bool(probe.session) if probe else None,
+            'tools_advertised': probe.tools_advertised if probe else None,
+            'tool_count': probe.tool_count if probe else None,
+            'tools_executed': False, 'requests': probe.events if probe else [],
+            'error': {'code': code, 'method': probe.active_method if probe else None,
+                      'message': error} if error else None,
+        }, sort_keys=True))
+    else:
+        print('FAIL: ' + error if error else 'PASS: bounded discovery completed. No tools were executed.')
+    return status
 
 
 if __name__ == '__main__':
