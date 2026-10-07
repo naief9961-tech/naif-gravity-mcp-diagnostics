@@ -1,0 +1,48 @@
+name: MCP diagnostics (manual)
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_remote:
+        description: Also probe the authorized endpoint in MCP_DIAGNOSTIC_URL
+        type: boolean
+        default: false
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  diagnostics:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Verify synthetic fixtures
+        run: |
+          python3 -m unittest discover -s tests -p test_mcp_health_check.py -v
+          python3 examples/mcp_discovery_demo.py
+          python3 examples/webhook_signature_fixture.py
+          python3 examples/json_report_demo.py > local-report.json
+          python3 -m json.tool local-report.json
+      - name: Probe explicitly authorized remote MCP endpoint
+        if: ${{ inputs.run_remote }}
+        env:
+          MCP_DIAGNOSTIC_URL: ${{ vars.MCP_DIAGNOSTIC_URL }}
+          MCP_DIAGNOSTIC_TOKEN: ${{ secrets.MCP_DIAGNOSTIC_TOKEN }}
+        shell: bash
+        run: |
+          if [ -z "$MCP_DIAGNOSTIC_URL" ]; then
+            echo "Configure MCP_DIAGNOSTIC_URL with an authorized endpoint first."
+            exit 1
+          fi
+          probe_args=("$MCP_DIAGNOSTIC_URL" --json --timeout 5)
+          if [ -n "$MCP_DIAGNOSTIC_TOKEN" ]; then
+            probe_args+=(--token-env MCP_DIAGNOSTIC_TOKEN)
+          fi
+          probe_status=0
+          python3 tools/mcp_health_check.py "${probe_args[@]}" > remote-report.json || probe_status=$?
+          python3 -m json.tool remote-report.json
+          exit "$probe_status"
