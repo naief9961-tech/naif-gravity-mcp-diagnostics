@@ -29,6 +29,37 @@ The probe refuses redirects and omits tokens, session values, server bodies and 
 
 Supported revisions: **2025-03-26, 2025-06-18, 2025-11-25**. This is not a full conformance suite and does not implement OAuth login, stdio, legacy SSE transport or newer stateless lifecycle revisions. Read the [quick start and limits](docs/DIAGNOSTIC-QUICKSTART.md).
 
+## See a healthy and a broken MCP response
+
+Run a self-contained demonstration from the complete checkout (Python standard library only):
+
+```bash
+python3 examples/mcp_discovery_demo.py
+```
+
+It starts temporary loopback fixtures and uses the actual probe. Healthy discovery exits `0`; a response with HTTP `200` but the wrong JSON-RPC request ID exits `1`. The demo itself exits `0` only when both expected results occur. No credentials, external endpoints or tool execution are involved.
+
+```text
+Scenario: json
+[initialize] HTTP 200
+protocol: 2025-11-25
+session: present
+[notifications/initialized] HTTP 202
+[tools/list] HTTP 200
+tools: 1
+PASS: bounded discovery completed. No tools were executed.
+probe exit: 0
+requests: initialize -> notifications/initialized -> tools/list
+
+Scenario: wrong-id
+[initialize] HTTP 200
+FAIL: mismatched request ID or invalid response shape
+probe exit: 1
+requests: initialize
+```
+
+This demo reuses the synthetic fixtures in `tests/test_mcp_health_check.py`; keep the full checkout. It demonstrates two cases, not full MCP conformance.
+
 ## Run a reproducible example locally
 
 ```bash
