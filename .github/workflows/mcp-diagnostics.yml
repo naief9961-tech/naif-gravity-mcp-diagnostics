@@ -22,11 +22,13 @@ jobs:
           persist-credentials: false
       - name: Verify synthetic fixtures
         run: |
-          python3 -m unittest discover -s tests -p test_mcp_health_check.py -v
+          python3 -m unittest discover -s tests -p 'test_*.py' -v
           python3 examples/mcp_discovery_demo.py
           python3 examples/webhook_signature_fixture.py
           python3 examples/json_report_demo.py > local-report.json
           python3 -m json.tool local-report.json
+          python3 examples/fault_lab.py
+          python3 tools/issue_report.py local-report.json > local-issue-draft.md
       - name: Probe explicitly authorized remote MCP endpoint
         if: ${{ inputs.run_remote }}
         env:
