@@ -106,6 +106,14 @@ The offline guard compares a healthy baseline with a current probe report. Faile
 
 See [CONTRIBUTING.md](CONTRIBUTING.md). Report a minimal synthetic reproduction, expected behavior, Python version and negotiated MCP revision. **Issues are public: never attach credentials or production/customer data.**
 
+## Optional NAIF Gravity commercial services — October 2026
+
+This standalone MCP diagnostic probe is **free**, with no purchase or commercial dependency. When a verified technical repair or structured-data service is needed beyond these free diagnostics, see the [NAIF Gravity launch offer](https://github.com/naief9961-tech/ai-growth-engine#launch-offer--one-time-technical-services-october-1226-2026) and the [live agent catalog](https://naifgravity.com/api/agent/catalog).
+
+**14 bounded technical-service prices are temporarily discounted**, through 26 October 2026 at 05:40 UTC or the first 10 verified eligible purchases. No coupon is needed and an eligible quote preserves its quoted price. Checkout does **not** imply instant autonomous implementation; most engineering products require a separate verified paid Work fulfillment.
+
+Separate instant-per-call x402 endpoints, methods and live prices are available through the [machine-readable x402 manifest](https://naifgravity.com/.well-known/x402) and the [x402 catalog](https://naifgravity.com/api/x402/catalog). The existing four full-scope x402 products remain $1, $2, $3 and $5 USDC per call. Proposed lower-priced Lite tools are not available for purchase yet. The wallet path follows the store's regional payment policy (Saudi-classified clients use the non-wallet checkout). Do not send private keys, credentials or customer records in diagnostics.
+
 ## Project context
 
 These diagnostic files were developed in [NAIF Gravity's Diagnostic Hub](https://github.com/naief9961-tech/ai-growth-engine/blob/main/NAIF-GRAVITY.md) and extracted into this standalone repository. See [NOTICE.md](NOTICE.md) for provenance. No code or workflows from the original AI Growth Engine project are included.
