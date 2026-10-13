@@ -1,6 +1,6 @@
 # NAIF Gravity MCP Diagnostics
 
-[![M8ven Score](https://m8ven.ai/badge/mcp/naief9961-tech-naif-gravity-mcp-diagnostics-srt2tw?v=897b35b265319b33b7514ba3371e0f6a)](https://m8ven.ai/mcp/naief9961-tech-naif-gravity-mcp-diagnostics-srt2tw?s=readme)
+[![M8ven Verified](https://m8ven.ai/badge/mcp/naief9961-tech-naif-gravity-mcp-diagnostics-srt2tw?v=897b35b265319b33b7514ba3371e0f6a&variant=verified)](https://m8ven.ai/mcp/naief9961-tech-naif-gravity-mcp-diagnostics-srt2tw?s=readme)
 
 A Python standard-library probe for **handshake-era MCP Streamable HTTP discovery**. Diagnose transport and protocol failures without executing server tools.
 
