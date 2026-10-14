@@ -4,6 +4,8 @@
 
 A Python standard-library probe for **handshake-era MCP Streamable HTTP discovery**. Diagnose transport and protocol failures without executing server tools.
 
+**Related field reports:** [NAIF Gravity's GitHub Issue Radar — MCP compatibility and x402 header failures (14 Oct 2026)](https://github.com/naief9961-tech/ai-growth-engine/blob/main/docs/GITHUB-ISSUE-RADAR-2026-10-14.md) offers source-linked repair plans. These are external issue analyses, not patches implemented by this probe; this tool does **not** handle stdio.
+
 ## Try it
 
 Requires Python 3.10 or later. No packages or account required for the local examples.
