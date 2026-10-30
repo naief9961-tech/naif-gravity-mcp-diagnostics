@@ -2,6 +2,16 @@
 
 # NAIF Gravity MCP Diagnostics
 
+<!-- naif-storefront-refresh-20261030 -->
+## New look at NAIF Gravity — 30 October 2026
+
+The NAIF Gravity storefront has a refreshed visual identity: midnight navy, copper accents and a glass-inspired homepage experience, with Arabic and English controls. Explore the updated [storefront](https://naifgravity.com) and [service catalog](https://naifgravity.com/services).
+
+**مظهر جديد لمتجر NAIF Gravity:** هوية كحلية ونحاسية وتجربة زجاجية في الصفحة الرئيسية، مع خيارات العربية والإنجليزية. [شاهد المتجر](https://naifgravity.com).
+
+This announcement covers the storefront design. Service scope, availability and current prices are stated on the relevant live service pages; the redesign does not establish new product readiness.
+<!-- /naif-storefront-refresh-20261030 -->
+
 [![M8ven Verified](https://m8ven.ai/badge/mcp/naief9961-tech-naif-gravity-mcp-diagnostics-srt2tw?v=897b35b265319b33b7514ba3371e0f6a&variant=verified)](https://m8ven.ai/mcp/naief9961-tech-naif-gravity-mcp-diagnostics-srt2tw?s=readme)
 
 A Python standard-library probe for **handshake-era MCP Streamable HTTP discovery**. Diagnose transport and protocol failures without executing server tools.
@@ -114,9 +124,9 @@ See [CONTRIBUTING.md](CONTRIBUTING.md). Report a minimal synthetic reproduction,
 
 ## Optional NAIF Gravity commercial services — October 2026
 
-This standalone MCP diagnostic probe is **free**, with no purchase or commercial dependency. When a verified technical repair or structured-data service is needed beyond these free diagnostics, see the [NAIF Gravity launch offer](https://github.com/naief9961-tech/ai-growth-engine#launch-offer--one-time-technical-services-october-1226-2026) and the [live agent catalog](https://naifgravity.com/api/agent/catalog).
+This standalone MCP diagnostic probe is **free**, with no purchase or commercial dependency. When a verified technical repair or structured-data service is needed beyond these free diagnostics, see the [current NAIF Gravity service pages](https://naifgravity.com/services) and the [live agent catalog](https://naifgravity.com/api/agent/catalog).
 
-**14 bounded technical-service prices are temporarily discounted**, through 26 October 2026 at 05:40 UTC or the first 10 verified eligible purchases. No coupon is needed and an eligible quote preserves its quoted price. Checkout does **not** imply instant autonomous implementation; most engineering products require a separate verified paid Work fulfillment.
+**The October launch promotion has ended.** Its deadline was no later than 26 October 2026 at 05:40 UTC. Consult the live service pages and accepted quote for current prices; existing accepted quotes retain their agreed terms. Checkout does **not** imply instant autonomous implementation; most engineering products require a separate verified paid Work fulfillment.
 
 Separate instant-per-call x402 endpoints, methods and live prices are available through the [machine-readable x402 manifest](https://naifgravity.com/.well-known/x402) and the [x402 catalog](https://naifgravity.com/api/x402/catalog). The existing four full-scope x402 products remain $1, $2, $3 and $5 USDC per call. Proposed lower-priced Lite tools are not available for purchase yet. The wallet path follows the store's regional payment policy (Saudi-classified clients use the non-wallet checkout). Do not send private keys, credentials or customer records in diagnostics.
 
