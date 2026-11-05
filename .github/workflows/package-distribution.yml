@@ -1,0 +1,120 @@
+name: NAIF package distribution (build by default)
+
+on:
+  pull_request:
+    paths:
+      - 'pyproject.toml'
+      - 'package.json'
+      - 'bin/**'
+      - 'tools/**'
+      - 'tests/**'
+      - 'docs/PACKAGE-DISTRIBUTION.md'
+      - '.github/workflows/package-distribution.yml'
+  workflow_dispatch:
+    inputs:
+      publish_pypi:
+        description: "Publish PyPI from a reviewed tag, only after owner OIDC setup"
+        type: boolean
+        default: false
+        required: true
+      publish_npm:
+        description: "Publish npm from a reviewed tag, only after owner OIDC setup"
+        type: boolean
+        default: false
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Original offline-first regression suite
+        run: python3 -m unittest discover -s tests -p 'test_*.py' -q
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: npm entrypoint tests
+        run: npm test
+      - name: Build Python sdist and wheel
+        run: |
+          python3 -m pip install --disable-pip-version-check build
+          python3 -m build --sdist --wheel --outdir dist .
+          python3 -m pip install --no-deps dist/*.whl
+          naif-mcp-doctor --help
+      - name: Audit npm tarball (no registry publish)
+        run: |
+          npm pack --dry-run
+          npm pack
+          sha256sum dist/* *.tgz
+      - uses: actions/upload-artifact@v4
+        with:
+          name: naif-distribution-${{ github.sha }}
+          path: |
+            dist/*
+            *.tgz
+          if-no-files-found: error
+          retention-days: 7
+
+  publish-pypi:
+    needs: test-and-build
+    if: >-
+      github.event_name == 'workflow_dispatch' &&
+      inputs.publish_pypi == true &&
+      github.ref_type == 'tag' &&
+      startsWith(github.ref_name, 'v')
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: naif-distribution-${{ github.sha }}
+          path: release-artifacts
+      - name: Publish PyPI with OIDC (must be configured by owner)
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: release-artifacts/dist/
+
+  publish-npm:
+    needs: test-and-build
+    if: >-
+      github.event_name == 'workflow_dispatch' &&
+      inputs.publish_npm == true &&
+      github.ref_type == 'tag' &&
+      startsWith(github.ref_name, 'v')
+    runs-on: ubuntu-latest
+    environment: npm
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+      - name: Validate package, npm OIDC requires >= 11.5.1
+        run: |
+          npm --version
+          npm test
+          npm pack --dry-run
+      - name: Publish npm with OIDC (must be configured by owner)
+        run: npm publish --access public

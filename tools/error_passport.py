@@ -15,7 +15,11 @@ import sys
 import urllib.parse
 from pathlib import Path
 
-from issue_report import render as validate_probe_report
+# Works both as the original standalone script and as an installed Python package.
+if __package__:
+    from .issue_report import render as validate_probe_report
+else:
+    from issue_report import render as validate_probe_report
 
 MAX_INPUT = 32768
 PROTOCOLS = {'2025-03-26', '2025-06-18', '2025-11-25'}

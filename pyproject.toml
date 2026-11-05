@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "naif-gravity-mcp-doctor"
+version = "0.3.0"
+description = "Offline-first NAIF Error Passport for sanitized MCP Streamable HTTP discovery reports"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{name = "NAIF Gravity"}]
+keywords = ["mcp", "agent", "diagnostics", "error-passport", "streamable-http"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Software Development :: Testing",
+]
+dependencies = []
+
+[project.urls]
+Homepage = "https://naifgravity.com/"
+Repository = "https://github.com/naief9961-tech/naif-gravity-mcp-diagnostics"
+Documentation = "https://github.com/naief9961-tech/naif-gravity-mcp-diagnostics/blob/main/docs/PACKAGE-DISTRIBUTION.md"
+Issues = "https://github.com/naief9961-tech/naif-gravity-mcp-diagnostics/issues"
+
+[project.scripts]
+naif-mcp-doctor = "naif_gravity_mcp_doctor.error_passport:main"
+
+[tool.setuptools]
+packages = ["naif_gravity_mcp_doctor"]
+
+[tool.setuptools.package-dir]
+naif_gravity_mcp_doctor = "tools"

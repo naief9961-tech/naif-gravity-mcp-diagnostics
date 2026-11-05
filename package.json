@@ -1,0 +1,34 @@
+{
+  "name": "naif-gravity-mcp-doctor",
+  "version": "0.3.0",
+  "description": "NAIF Gravity Error Passport: offline-first MCP discovery diagnostic (requires Python 3.10+)",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "naif-mcp-doctor": "./bin/naif-mcp-doctor.mjs",
+    "naif-gravity-mcp-doctor": "./bin/naif-mcp-doctor.mjs"
+  },
+  "files": [
+    "bin/naif-mcp-doctor.mjs",
+    "tools/error_passport.py",
+    "tools/issue_report.py",
+    "tools/mcp_health_check.py",
+    "docs/DIAGNOSTIC-QUICKSTART.md",
+    "docs/ERROR-PASSPORT.md",
+    "docs/PACKAGE-DISTRIBUTION.md"
+  ],
+  "engines": {"node": ">=20"},
+  "dependencies": {},
+  "scripts": {
+    "test": "node --test tests/npm-passport.test.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/naief9961-tech/naif-gravity-mcp-diagnostics.git"
+  },
+  "homepage": "https://naifgravity.com/",
+  "bugs": {
+    "url": "https://github.com/naief9961-tech/naif-gravity-mcp-diagnostics/issues"
+  },
+  "keywords": ["mcp", "agent", "diagnostics", "offline", "error-passport"]
+}

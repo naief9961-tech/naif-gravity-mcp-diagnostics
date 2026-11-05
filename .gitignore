@@ -2,3 +2,10 @@ __pycache__/
 *.py[cod]
 .env
 .venv/
+
+# Python/npm build output (never commit binaries or upload credentials)
+dist/
+build/
+*.egg-info/
+*.tgz
+.npm/

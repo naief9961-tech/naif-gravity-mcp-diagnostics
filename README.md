@@ -32,6 +32,16 @@ A successful HTTP status does not prove that an MCP tool or downstream workflow 
 
 For compatible coding agents, the [free-first emergency-triage Skill](skills/naif-agent-emergency-triage/SKILL.md) describes when to use each diagnostic and when to **stop without buying anything**. A paid service is optional, separately scoped and requires the buyer's explicit authorization; current eligibility and pricing are defined only by [the live catalog](https://naifgravity.com/api/agent/catalog).
 
+## NAIF SUPERNOVA — package distribution
+
+The existing free NAIF Error Passport now has **source packaging** for
+`naif-gravity-mcp-doctor` on PyPI and npm. The Node package is a thin,
+offline-by-default launcher and **requires Python 3.10+**.
+Check registry pages before installing: **a GitHub release does not prove
+either package is published**. No account credentials or installer telemetry
+are needed to build locally. See the
+[packaging and trusted-publisher guide](docs/PACKAGE-DISTRIBUTION.md).
+
 ## NAIF Error Passport — local evidence card (free alpha)
 
 **Current public release:** [v0.2.1 — NAIF Error Passport](https://github.com/naief9961-tech/naif-gravity-mcp-diagnostics/releases/tag/v0.2.1). Version v0.2.1 corrects the portable Action metadata description limit; the free local diagnostic behavior is unchanged. The official Skills CLI can discover this repository's Skill without installing it: `DISABLE_TELEMETRY=1 npx skills add naief9961-tech/naif-gravity-mcp-diagnostics --list`.
