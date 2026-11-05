@@ -1,7 +1,7 @@
 {
   "name": "naif-gravity-mcp-doctor",
-  "version": "0.3.0",
-  "description": "NAIF Gravity Error Passport: offline-first MCP discovery diagnostic (requires Python 3.10+)",
+  "version": "0.3.1",
+  "description": "NAIF Gravity MCP Doctor: free MCP server timeout, tools/list and JSON-RPC diagnostics (Python 3.10+ required)",
   "license": "MIT",
   "type": "module",
   "bin": {
@@ -17,7 +17,9 @@
     "docs/ERROR-PASSPORT.md",
     "docs/PACKAGE-DISTRIBUTION.md"
   ],
-  "engines": {"node": ">=20"},
+  "engines": {
+    "node": ">=20"
+  },
   "dependencies": {},
   "scripts": {
     "test": "node --test tests/npm-passport.test.mjs"
@@ -30,5 +32,20 @@
   "bugs": {
     "url": "https://github.com/naief9961-tech/naif-gravity-mcp-diagnostics/issues"
   },
-  "keywords": ["mcp", "agent", "diagnostics", "offline", "error-passport"]
+  "keywords": [
+    "naif-gravity",
+    "mcp",
+    "model-context-protocol",
+    "mcp-server",
+    "mcp-server-timeout",
+    "tools-list",
+    "json-rpc",
+    "streamable-http",
+    "sse",
+    "coding-agents",
+    "agent-diagnostics",
+    "error-passport",
+    "mcp-troubleshooting",
+    "offline-cli"
+  ]
 }

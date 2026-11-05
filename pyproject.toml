@@ -4,14 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "naif-gravity-mcp-doctor"
-version = "0.3.0"
-description = "Offline-first NAIF Error Passport for sanitized MCP Streamable HTTP discovery reports"
+version = "0.3.1"
+description = "NAIF Gravity MCP Doctor: free MCP server timeout, JSON-RPC and tools/list diagnostics with local Error Passport"
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
 license-files = ["LICENSE"]
 authors = [{name = "NAIF Gravity"}]
-keywords = ["mcp", "agent", "diagnostics", "error-passport", "streamable-http"]
+keywords = ["NAIF Gravity", "MCP", "Model Context Protocol", "MCP server timeout", "tools/list", "JSON-RPC", "Streamable HTTP", "SSE", "coding agents", "MCP diagnostics", "Error Passport", "offline CLI"]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Environment :: Console",
@@ -30,6 +30,10 @@ Homepage = "https://naifgravity.com/"
 Repository = "https://github.com/naief9961-tech/naif-gravity-mcp-diagnostics"
 Documentation = "https://github.com/naief9961-tech/naif-gravity-mcp-diagnostics/blob/main/docs/PACKAGE-DISTRIBUTION.md"
 Issues = "https://github.com/naief9961-tech/naif-gravity-mcp-diagnostics/issues"
+Changelog = "https://github.com/naief9961-tech/naif-gravity-mcp-diagnostics/releases"
+"Free Troubleshooting Guides" = "https://naifgravity.com/discover"
+"Arabic MCP Guides" = "https://naifgravity.com/ar/discover"
+
 
 [project.scripts]
 naif-mcp-doctor = "naif_gravity_mcp_doctor.error_passport:main"

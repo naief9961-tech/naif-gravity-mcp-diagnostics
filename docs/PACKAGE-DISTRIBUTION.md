@@ -1,12 +1,12 @@
 # NAIF Gravity MCP Doctor — package distribution
 
-**Status:** source artifacts prepared; publishing is separate. Verify actual registry pages before claiming release:
+**Status:** both package registries have a live 0.3.0 release; version 0.3.1 updates search-facing descriptions and documentation without changing diagnostic behavior. Verify the latest release at:
 - https://pypi.org/project/naif-gravity-mcp-doctor/
 - https://www.npmjs.com/package/naif-gravity-mcp-doctor
 
 The package reuses the existing free, local **NAIF Error Passport** (MIT). It never automatically uploads reports, executes MCP tools, charges a buyer or contacts the store. It is limited to bounded MCP discovery; it does not guarantee repair or conformance.
 
-## Once released, install
+## Install from the official registries
 
 ```bash
 python3 -m pip install naif-gravity-mcp-doctor
@@ -42,7 +42,7 @@ Configure a **pending** trusted publisher in your real PyPI account if the proje
 
 ## npm publishing
 
-The first npm publication may require interactive account access and trusted-publisher setup. Use the same GitHub owner/repo and workflow filename `package-distribution.yml`, environment `npm`, and npm CLI 11.5.1+ under Node 24 in CI. After trusted publishing and any first-upload step required by npm, publish only from a reviewed tag by manually selecting `publish_npm=true`. Never place tokens in source, logs or chat. Official setup: https://docs.npmjs.com/trusted-publishers/
+The initial npm package was published through npm staged publishing and account-owner approval. Subsequent releases also require the current account publishing rules. Use the same GitHub owner/repo and workflow filename `package-distribution.yml`, environment `npm`, and npm CLI 11.5.1+ under Node 24 in CI. After trusted publishing and any first-upload step required by npm, publish only from a reviewed tag by manually selecting `publish_npm=true`. Never place tokens in source, logs or chat. Official setup: https://docs.npmjs.com/trusted-publishers/
 
 ## GitHub Action
 
